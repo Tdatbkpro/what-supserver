@@ -8,6 +8,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Route test
+app.get('/', (req, res) => {
+  res.send('✅ Cloudinary Signature Server is running!');
+});
+
+// Route tạo chữ ký
 app.post('/get-signature', (req, res) => {
   const timestamp = Math.floor(Date.now() / 1000);
   const paramsToSign = `timestamp=${timestamp}`;
