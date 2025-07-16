@@ -8,15 +8,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Route test
-app.get('/', (req, res) => {
-  res.send('✅ Cloudinary Signature Server is running!');
-});
-
-// Route tạo chữ ký
 app.post('/get-signature', (req, res) => {
   const timestamp = Math.floor(Date.now() / 1000);
-  const paramsToSign = `timestamp=${timestamp}`;
+  const uploadPreset = "What'sUpS"; // 👈 Preset bạn đã tạo
+
+  const paramsToSign = `timestamp=${timestamp}&upload_preset=${uploadPreset}`; // 👈 Cần đúng thứ tự
+
   const signature = crypto
     .createHash('sha1')
     .update(paramsToSign + process.env.CLOUDINARY_API_SECRET)
@@ -27,9 +24,10 @@ app.post('/get-signature', (req, res) => {
     timestamp,
     apiKey: process.env.CLOUDINARY_API_KEY,
     cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    uploadPreset // 👈 Gửi thêm cho client Flutter
   });
 });
 
 app.listen(3000, () => {
-  console.log('🚀 Server running on http://localhost:3000');
+  console.log('🚀 Cloudinary Signature Server running on http://localhost:3000');
 });
